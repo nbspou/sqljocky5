@@ -55,8 +55,8 @@ void runExecuteMultiTests(
         skip:
             "Not completely addressed - https://github.com/jamesots/sqljocky/issues/43");
 
-    test('close connection', () {
-      pool.closeConnectionsWhenNotInUse();
+    test('close connection', () async {
+      await pool.closeConnectionsWhenNotInUse();
     });
   });
 }

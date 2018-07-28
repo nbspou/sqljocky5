@@ -5,6 +5,7 @@ import 'dart:collection';
 
 import 'package:logging/logging.dart';
 import 'package:sqljocky5/src/auth/character_set.dart';
+import 'package:sqljocky5/src/handlers/quit_handler.dart';
 
 import 'connection.dart';
 import 'connection_helpers.dart';
@@ -206,9 +207,10 @@ class ConnectionPoolImpl extends Object
    * executed on new connections, even if the current operations haven't
    * yet finished when the operation is queued.
    */
-  void closeConnectionsWhenNotInUse() {
+  Future closeConnectionsWhenNotInUse() async {
     for (Connection cnx in _pool.toList()) {
       if (cnx != null) {
+        await cnx.processHandler(new QuitHandler(), noResponse: true);
         cnx.closeWhenFinished();
       }
     }

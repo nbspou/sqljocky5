@@ -24,8 +24,8 @@ void runStoredProcedureTests(String user, String password, String db, int port, 
       return c.future;
     });
 
-    test('close connection', () {
-      pool.closeConnectionsWhenNotInUse();
+    test('close connection', () async {
+      await pool.closeConnectionsWhenNotInUse();
     });
   });
 }

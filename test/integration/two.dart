@@ -61,8 +61,8 @@ void runIntTests2(
       });
     });
 
-    test('close connection', () {
-      pool.closeConnectionsWhenNotInUse();
+    test('close connection', () async {
+      await pool.closeConnectionsWhenNotInUse();
       expect(1, equals(1));
     });
   });

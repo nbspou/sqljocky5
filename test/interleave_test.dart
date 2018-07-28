@@ -189,7 +189,7 @@ void main() {
       await example.run();
       // finally, close the connection
       log.fine("closing");
-      pool.closeConnectionsWhenNotInUse();
+      await pool.closeConnectionsWhenNotInUse();
       // not much of a test, is it?
       expect(true, isTrue);
     });

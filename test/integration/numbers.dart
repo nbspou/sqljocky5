@@ -103,8 +103,8 @@ void runNumberTests(
       expect(row[0], equals(-1234512345.1234512345));
     });
 
-    test('close connection', () {
-      pool.closeConnectionsWhenNotInUse();
+    test('close connection', () async {
+      await pool.closeConnectionsWhenNotInUse();
     });
   });
 }

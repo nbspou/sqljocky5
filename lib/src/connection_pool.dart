@@ -81,7 +81,7 @@ abstract class ConnectionPool implements QueriableConnection {
    * executed on new connections, even if the current operations haven't
    * yet finished when the operation is queued.
    */
-  void closeConnectionsWhenNotInUse();
+  Future closeConnectionsWhenNotInUse();
 
   Future<Results> query(String sql);
 

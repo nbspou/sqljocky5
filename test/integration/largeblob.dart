@@ -28,8 +28,8 @@ void runLargeBlobTests(String user, String password, String db, int port, String
       return c.future;
     });
 
-    test('close connection', () {
-      pool.closeConnectionsWhenNotInUse();
+    test('close connection', () async {
+      await pool.closeConnectionsWhenNotInUse();
     });
   });
 }

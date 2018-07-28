@@ -116,5 +116,5 @@ main() async {
   await example.run();
   // finally, close the connection
   print("K THNX BYE!");
-  pool.closeConnectionsNow();
+  await pool.closeConnectionsNow();
 }
