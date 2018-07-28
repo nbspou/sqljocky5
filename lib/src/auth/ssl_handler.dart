@@ -14,7 +14,7 @@ class SSLHandler extends Handler {
 
   SSLHandler(
       this.clientFlags, this.maxPacketSize, this.characterSet, this.nextHandler)
-      : super(new Logger("SSLHandler"));
+      : super(new Logger("SqlJocky.SSLHandler"));
 
   Buffer createRequest() {
     var buffer = new Buffer(32);

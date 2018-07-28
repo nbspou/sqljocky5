@@ -39,7 +39,7 @@ class HandshakeHandler extends Handler {
       : _db = db,
         this.useCompression = useCompression,
         this.useSSL = useSSL,
-        super(new Logger("HandshakeHandler"));
+        super(new Logger("SqlJocky.HandshakeHandler"));
 
   /**
    * The server initiates the handshake after the client connects,

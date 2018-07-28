@@ -7,7 +7,7 @@ import '../buffer.dart';
 import 'handler.dart';
 
 class PingHandler extends Handler {
-  PingHandler() : super(new Logger("PingHandler"));
+  PingHandler() : super(new Logger("SqlJocky.PingHandler"));
 
   Buffer createRequest() {
     log.finest("Creating buffer for PingHandler");

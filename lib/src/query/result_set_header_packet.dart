@@ -12,7 +12,7 @@ class ResultSetHeaderPacket {
   int get fieldCount => _fieldCount;
 
   ResultSetHeaderPacket(Buffer buffer) {
-    log = new Logger("ResultSetHeaderPacket");
+    log = new Logger("SqlJocky.ResultSetHeaderPacket");
     _fieldCount = buffer.readLengthCodedBinary();
     if (buffer.canReadMore()) {
       _extra = buffer.readLengthCodedBinary();

@@ -8,7 +8,7 @@ import '../mysql_protocol_error.dart';
 import 'handler.dart';
 
 class QuitHandler extends Handler {
-  QuitHandler() : super(new Logger("QuitHandler"));
+  QuitHandler() : super(new Logger("SqlJocky.QuitHandler"));
 
   Buffer createRequest() {
     var buffer = new Buffer(1);

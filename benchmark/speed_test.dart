@@ -13,7 +13,7 @@ class SpeedTest {
   ConnectionPool pool;
   Logger log;
 
-  SpeedTest(this.pool) : log = new Logger("Speed");
+  SpeedTest(this.pool) : log = new Logger("SqlJocky.Speed");
 
   Future run() async {
     await dropTables();
@@ -98,14 +98,14 @@ class SpeedTest {
 main() async {
   hierarchicalLoggingEnabled = true;
   Logger.root.level = Level.OFF;
-//  new Logger("ConnectionPool").level = Level.ALL;
-//  new Logger("Connection.Lifecycle").level = Level.ALL;
-//  new Logger("Query").level = Level.ALL;
+//  new Logger("SqlJocky.ConnectionPool").level = Level.ALL;
+//  new Logger("SqlJocky.Connection.Lifecycle").level = Level.ALL;
+//  new Logger("SqlJocky.Query").level = Level.ALL;
   Logger.root.onRecord.listen((LogRecord r) {
     print("${r.time}: ${r.loggerName}: ${r.message}");
   });
 
-  var log = new Logger("Speed");
+  var log = new Logger("SqlJocky.Speed");
   log.level = Level.ALL;
 
   var options = new OptionsFile('connection.options');

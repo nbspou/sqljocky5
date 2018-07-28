@@ -78,7 +78,7 @@ class ConnectionPoolImpl extends Object
         _maxPacketSize = maxPacketSize,
         _max = max,
         _useSSL = useSSL,
-        _log = new Logger("ConnectionPool");
+        _log = new Logger("SqlJocky.ConnectionPool");
 
   Future<Connection> getConnectionInternal() {
     _log.finest("Getting a connection");

@@ -26,7 +26,7 @@ class AuthHandler extends Handler {
       int this.clientFlags,
       int this.maxPacketSize,
       int this.characterSet,
-      ) : super(new Logger("AuthHandler"));
+      ) : super(new Logger("SqlJocky.AuthHandler"));
 
   List<int> getHash() {
     List<int> hash;

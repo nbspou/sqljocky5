@@ -60,8 +60,8 @@ class Connection {
 
   Connection(ConnectionPool pool, this.number, this._maxPacketSize)
       : this._pool = pool as ConnectionPoolImpl,
-        log = new Logger("Connection"),
-        lifecycleLog = new Logger("Connection.Lifecycle"),
+        log = new Logger("SqlJocky.Connection"),
+        lifecycleLog = new Logger("SqlJocky.Connection.Lifecycle"),
         _headerBuffer = new Buffer(HEADER_SIZE),
         _compressedHeaderBuffer = new Buffer(COMPRESSED_HEADER_SIZE),
         _preparedQueryCache = new Map<String, PreparedQuery>(),

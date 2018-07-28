@@ -7,7 +7,7 @@ import '../buffer.dart';
 import 'handler.dart';
 
 class DebugHandler extends Handler {
-  DebugHandler() : super(new Logger("DebugHandler"));
+  DebugHandler() : super(new Logger("SqlJocky.DebugHandler"));
 
   Buffer createRequest() {
     var buffer = new Buffer(1);

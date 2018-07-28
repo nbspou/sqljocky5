@@ -26,7 +26,7 @@ class PrepareHandler extends Handler {
   List<FieldImpl> get parameters => _parameters;
   List<FieldImpl> get columns => _columns;
 
-  PrepareHandler(String this._sql) : super(new Logger("PrepareHandler"));
+  PrepareHandler(String this._sql) : super(new Logger("SqlJocky.PrepareHandler"));
 
   Buffer createRequest() {
     var encoded = utf8.encode(_sql);

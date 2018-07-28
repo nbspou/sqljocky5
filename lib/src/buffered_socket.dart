@@ -40,7 +40,7 @@ class BufferedSocket {
 
   BufferedSocket._(
       this._socket, this.onDataReady, this.onDone, this.onError, this.onClosed)
-      : log = new Logger("BufferedSocket") {
+      : log = new Logger("SqlJocky.BufferedSocket") {
     _subscription = _socket.listen(_onData,
         onError: _onSocketError, onDone: _onSocketDone, cancelOnError: true);
   }

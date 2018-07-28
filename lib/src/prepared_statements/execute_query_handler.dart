@@ -40,7 +40,7 @@ class ExecuteQueryHandler extends Handler {
 
   ExecuteQueryHandler(
       PreparedQuery this._preparedQuery, bool this._executed, List this._values)
-      : super(new Logger("ExecuteQueryHandler")) {
+      : super(new Logger("SqlJocky.ExecuteQueryHandler")) {
     fieldPackets = <FieldImpl>[];
   }
 

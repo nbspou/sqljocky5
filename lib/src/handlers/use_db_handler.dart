@@ -11,7 +11,7 @@ import 'handler.dart';
 class UseDbHandler extends Handler {
   final String _dbName;
 
-  UseDbHandler(String this._dbName) : super(new Logger("UseDbHandler"));
+  UseDbHandler(String this._dbName) : super(new Logger("SqlJocky.UseDbHandler"));
 
   Buffer createRequest() {
     var encoded = utf8.encode(_dbName);

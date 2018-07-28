@@ -31,7 +31,7 @@ class Buffer {
    */
   Buffer(int size)
       : _list = new Uint8List(size),
-        log = new Logger("Buffer") {
+        log = new Logger("SqlJocky.Buffer") {
     _data = new ByteData.view(_list.buffer);
   }
 
@@ -40,7 +40,7 @@ class Buffer {
    */
   Buffer.fromList(List<int> list)
       : _list = new Uint8List(list.length),
-        log = new Logger("Buffer") {
+        log = new Logger("SqlJocky.Buffer") {
     _list.setRange(0, list.length, list);
     _data = new ByteData.view(_list.buffer);
   }

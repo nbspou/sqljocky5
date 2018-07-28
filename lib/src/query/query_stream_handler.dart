@@ -34,7 +34,7 @@ class QueryStreamHandler extends Handler {
   StreamController<Row> _streamController;
 
   QueryStreamHandler(String this._sql)
-      : super(new Logger("QueryStreamHandler"));
+      : super(new Logger("SqlJocky.QueryStreamHandler"));
 
   Buffer createRequest() {
     var encoded = utf8.encode(_sql);

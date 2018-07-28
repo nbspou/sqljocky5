@@ -27,12 +27,12 @@ class QueryImpl extends Object with ConnectionHelpers implements Query {
   QueryImpl(this._pool, this.sql)
       : _cnx = null,
         _inTransaction = false,
-        _log = new Logger("Query");
+        _log = new Logger("SqlJocky.Query");
 
   QueryImpl.forTransaction(this._pool, Connection cnx, this.sql)
       : _cnx = cnx,
         _inTransaction = true,
-        _log = new Logger("Query");
+        _log = new Logger("SqlJocky.Query");
 
   Future<Connection> _getConnection() async {
     if (_cnx != null) {

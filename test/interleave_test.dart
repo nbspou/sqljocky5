@@ -153,14 +153,14 @@ class Example {
 void main() {
   hierarchicalLoggingEnabled = true;
   Logger.root.level = Level.OFF;
-//  new Logger("ConnectionPool").level = Level.ALL;
-//  new Logger("Connection.Lifecycle").level = Level.ALL;
-//  new Logger("Query").level = Level.ALL;
+//  new Logger("SqlJocky.ConnectionPool").level = Level.ALL;
+//  new Logger("SqlJocky.Connection.Lifecycle").level = Level.ALL;
+//  new Logger("SqlJocky.Query").level = Level.ALL;
   Logger.root.onRecord.listen((LogRecord r) {
     print("${r.time}: ${r.loggerName}: ${r.message}");
   });
 
-  var log = new Logger("Interleave");
+  var log = new Logger("SqlJocky.Interleave");
   log.level = Level.ALL;
 
   group('interleave', () {

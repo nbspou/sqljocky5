@@ -16,10 +16,10 @@ class BinaryDataPacket extends Row {
   final Logger log;
 
   BinaryDataPacket.forTests(this.values, this._fieldIndex)
-      : log = new Logger("BinaryDataPacket");
+      : log = new Logger("SqlJocky.BinaryDataPacket");
 
   BinaryDataPacket(Buffer buffer, List<FieldImpl> fields, this._fieldIndex)
-      : log = new Logger("BinaryDataPacket") {
+      : log = new Logger("SqlJocky.BinaryDataPacket") {
     buffer.skip(1);
     var nulls = buffer.readList(((fields.length + 7 + 2) / 8).floor().toInt());
     log.fine("Nulls: $nulls");

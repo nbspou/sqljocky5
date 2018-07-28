@@ -24,8 +24,8 @@ part 'integration/two.dart';
 void main() {
   hierarchicalLoggingEnabled = true;
   Logger.root.level = Level.OFF;
-//  new Logger("ConnectionPool").level = Level.ALL;
-//  new Logger("Query").level = Level.ALL;
+//  new Logger("SqlJocky.ConnectionPool").level = Level.ALL;
+//  new Logger("SqlJocky.Query").level = Level.ALL;
   var listener = (LogRecord r) {
     var name = r.loggerName;
     if (name.length > 15) {
