@@ -42,14 +42,15 @@ void runExecuteMultiTests(
     });
 
     test('issue 43', () async {
-      var tran = await pool.startTransaction();
-      var query = await tran.prepare("SELECT * FROM stream");
-      var result = await query.execute();
+      await pool.startTransaction((Transaction tran) async {
+        var query = await tran.prepare("SELECT * FROM stream");
+        var result = await query.execute();
 
-      await result.first;
+        await result.first;
 
-      await query.close();
-      await tran.rollback();
+        await query.close();
+        await tran.rollback();
+      });
     },
         skip:
             "Not completely addressed - https://github.com/jamesots/sqljocky/issues/43");

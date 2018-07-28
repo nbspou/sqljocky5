@@ -88,15 +88,15 @@ abstract class ConnectionPool implements QueriableConnection {
   Future<Query> prepare(String sql);
 
   /**
-   * Starts a transaction. Returns a [Future]<[Transaction]> that completes
-   * when the transaction has been started. If [consistent] is true, the
+   * Starts a transaction. If [consistent] is true, the
    * transaction is started with consistent snapshot. A transaction holds
    * onto its connection until closed (committed or rolled back). You
    * must use this method rather than `query('start transaction')` otherwise
    * subsequent queries may get executed on other connections which are not
    * in the transaction. Likewise, you must use the [Transaction.commit]
-   * and [Transaction.rollback] methods to commit and roll back, otherwise
-   * the connection will not be released.
+   * and [Transaction.rollback] methods to commit and roll back.
+   * The transaction will be automatically rolled back in case it has not
+   * been released, or in case an exception occured during the transaction.
    */
-  Future<Transaction> startTransaction({bool consistent: false});
+  Future startTransaction(Future handler(Transaction transaction), {bool consistent: false});
 }

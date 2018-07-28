@@ -317,7 +317,7 @@ class ConnectionPoolImpl extends Object
    * and [Transaction.rollback] methods to commit and roll back, otherwise
    * the connection will not be released.
    */
-  Future<Transaction> startTransaction({bool consistent: false}) async {
+  Future<TransactionImpl> _startTransaction({bool consistent: false}) async {
     _log.info("Starting transaction");
 
     var cnx = await getConnectionInternal();
@@ -336,6 +336,28 @@ class ConnectionPoolImpl extends Object
       releaseReuseThrow(cnx, e);
     }
     return null;
+  }
+
+  /**
+   * Starts a transaction. If [consistent] is true, the
+   * transaction is started with consistent snapshot. A transaction holds
+   * onto its connection until closed (committed or rolled back). You
+   * must use this method rather than `query('start transaction')` otherwise
+   * subsequent queries may get executed on other connections which are not
+   * in the transaction. Likewise, you must use the [Transaction.commit]
+   * and [Transaction.rollback] methods to commit and roll back.
+   * The transaction will be automatically rolled back in case it has not
+   * been released, or in case an exception occured during the transaction.
+   */
+  Future startTransaction(Future handler(Transaction transaction), {bool consistent: false}) async {
+    TransactionImpl transaction = await _startTransaction(consistent: consistent);
+    try {
+      await handler(transaction);
+    } catch (e) {
+      await transaction.close();
+      rethrow;
+    }
+    await transaction.close();
   }
 
   /**

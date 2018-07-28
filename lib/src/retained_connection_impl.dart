@@ -47,6 +47,13 @@ class TransactionImpl extends _RetainedConnectionBase implements Transaction {
       throw new StateError("Transaction has already finished");
     }
   }
+
+  Future close() async {
+    if (!_released) {
+      await rollback();
+    }
+  }
+
 }
 
 class _TransactionPool extends ConnectionPoolImpl {

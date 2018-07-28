@@ -223,18 +223,19 @@ void main() {
   });
 
   test('multi queries', () async {
-    var trans = await pool.startTransaction();
-    var start = new DateTime.now();
-    var query = await trans.prepare('insert into test1 (aint) values (?)');
-    var params = [];
-    for (var i = 0; i < 50; i++) {
-      params.add([i]);
-    }
-    var resultList = await query.executeMulti(params);
-    var end = new DateTime.now();
-    print(end.difference(start));
-    expect(resultList.length, equals(50));
-    await trans.commit();
+    await pool.startTransaction((Transaction trans) async {
+      var start = new DateTime.now();
+      var query = await trans.prepare('insert into test1 (aint) values (?)');
+      var params = [];
+      for (var i = 0; i < 50; i++) {
+        params.add([i]);
+      }
+      var resultList = await query.executeMulti(params);
+      var end = new DateTime.now();
+      print(end.difference(start));
+      expect(resultList.length, equals(50));
+      await trans.commit();
+    });
   });
 
   test('blobs in prepared queries', () async {

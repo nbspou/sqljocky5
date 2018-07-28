@@ -85,47 +85,48 @@ class Example {
   Future addDataInTransaction() async {
     print("adding");
     var ids = [];
-    var trans = await pool.startTransaction();
-    var query =
-        await trans.prepare("insert into people (name, age) values (?, ?)");
-    var parameters = [
-      ["Dave", 15],
-      ["John", 16],
-      ["Mavis", 93]
-    ];
-    var results = await query.executeMulti(parameters);
-    for (var result in results) {
-      ids.add(result.insertId);
-    }
-    print("added people");
-    query = await trans
-        .prepare("insert into pets (name, species, owner_id) values (?, ?, ?)");
-    var id1, id2, id3;
-    if (insertedIds.length < 3) {
-      id1 = ids[0];
-      id2 = ids[1];
-      id3 = ids[2];
-    } else {
-      id1 = insertedIds[rnd.nextInt(insertedIds.length)];
-      id2 = insertedIds[rnd.nextInt(insertedIds.length)];
-      id3 = insertedIds[rnd.nextInt(insertedIds.length)];
-    }
-    parameters = [
-      ["Rover", "Dog", id1],
-      ["Daisy", "Cow", id2],
-      ["Spot", "Dog", id3]
-    ];
-    print("adding pets");
-    try {
-      results = await query.executeMulti(parameters);
-      print("added pets");
-    } catch (e) {
-      print("Exception: $e");
-    }
-    print("committing");
-    await trans.commit();
-    print("committed");
-    insertedIds.addAll(ids);
+    await pool.startTransaction((Transaction trans) async {
+      var query =
+          await trans.prepare("insert into people (name, age) values (?, ?)");
+      var parameters = [
+        ["Dave", 15],
+        ["John", 16],
+        ["Mavis", 93]
+      ];
+      var results = await query.executeMulti(parameters);
+      for (var result in results) {
+        ids.add(result.insertId);
+      }
+      print("added people");
+      query = await trans
+          .prepare("insert into pets (name, species, owner_id) values (?, ?, ?)");
+      var id1, id2, id3;
+      if (insertedIds.length < 3) {
+        id1 = ids[0];
+        id2 = ids[1];
+        id3 = ids[2];
+      } else {
+        id1 = insertedIds[rnd.nextInt(insertedIds.length)];
+        id2 = insertedIds[rnd.nextInt(insertedIds.length)];
+        id3 = insertedIds[rnd.nextInt(insertedIds.length)];
+      }
+      parameters = [
+        ["Rover", "Dog", id1],
+        ["Daisy", "Cow", id2],
+        ["Spot", "Dog", id3]
+      ];
+      print("adding pets");
+      try {
+        results = await query.executeMulti(parameters);
+        print("added pets");
+      } catch (e) {
+        print("Exception: $e");
+      }
+      print("committing");
+      await trans.commit();
+      print("committed");
+      insertedIds.addAll(ids);
+    });
   }
 
   Future readData() async {
