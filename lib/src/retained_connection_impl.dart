@@ -48,7 +48,7 @@ class TransactionImpl extends _RetainedConnectionBase implements Transaction {
     }
   }
 
-  Future close() async {
+  Future release() async {
     if (!_released) {
       await rollback();
     }

@@ -354,10 +354,10 @@ class ConnectionPoolImpl extends Object
     try {
       await handler(transaction);
     } catch (e) {
-      await transaction.close();
+      await transaction.release();
       rethrow;
     }
-    await transaction.close();
+    await transaction.release();
   }
 
   /**
