@@ -94,7 +94,7 @@ abstract class ConnectionPool implements QueriableConnection {
    * must use this method rather than `query('start transaction')` otherwise
    * subsequent queries may get executed on other connections which are not
    * in the transaction. Likewise, you must use the [Transaction.commit]
-   * and [Transaction.rollback] methods to commit and roll back.
+   * and [Transaction.rollback] methods to commit and roll back to release.
    * The transaction will be automatically rolled back in case it has not
    * been released, or in case an exception occured during the transaction.
    */
