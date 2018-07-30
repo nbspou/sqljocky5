@@ -383,7 +383,7 @@ class ConnectionPoolImpl extends Object
 
   Future<Results> prepareExecute(String sql, List parameters) async {
     var query = await prepare(sql);
-    return query.execute(parameters);
+    return await query.execute(parameters);
   }
 
 //  dynamic fieldList(String table, [String column]);
