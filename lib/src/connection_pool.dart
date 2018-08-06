@@ -54,12 +54,12 @@ abstract class ConnectionPool implements QueriableConnection {
    * Sends a debug message to the server. Returns a [Future] that completes
    * when the server replies.
    */
-  Future debug();
+  Future<Null> debug();
 
   /**
    * Pings the server. Returns a [Future] that completes when the server replies.
    */
-  Future ping();
+  Future<Null> ping();
 
   Future<Results> prepareExecute(String sql, List parameters);
 
@@ -98,5 +98,5 @@ abstract class ConnectionPool implements QueriableConnection {
    * The transaction will be automatically rolled back in case it has not
    * been released, or in case an exception occured during the transaction.
    */
-  Future startTransaction(Future handler(Transaction transaction), {bool consistent: false});
+  Future<Null> startTransaction(Future<void> handler(Transaction transaction), {bool consistent: false});
 }

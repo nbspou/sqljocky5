@@ -20,7 +20,7 @@ class Example {
 
   Example(this.pool);
 
-  Future run() async {
+  Future<Null> run() async {
     // drop the tables if they already exist
     await dropTables();
     print("dropped tables");
@@ -38,13 +38,13 @@ class Example {
     print("data added and read");
   }
 
-  Future dropTables() {
+  Future<Null> dropTables() {
     print("dropping tables");
     var dropper = new TableDropper(pool, ['pets', 'people']);
     return dropper.dropTables();
   }
 
-  Future createTables() {
+  Future<Null> createTables() {
     print("creating tables");
     var querier = new QueryRunner(pool, [
       'create table people (id integer not null auto_increment, '
@@ -62,7 +62,7 @@ class Example {
     return querier.executeQueries();
   }
 
-  Future addData() async {
+  Future<Null> addData() async {
     print("adding");
     var query =
         await pool.prepare("insert into people (name, age) values (?, ?)");
@@ -82,7 +82,7 @@ class Example {
     await query.executeMulti(parameters);
   }
 
-  Future addDataInTransaction() async {
+  Future<Null> addDataInTransaction() async {
     print("adding");
     var ids = [];
     await pool.startTransaction((Transaction trans) async {
@@ -129,7 +129,7 @@ class Example {
     });
   }
 
-  Future readData() async {
+  Future<Null> readData() async {
     print("querying");
     var result =
         await pool.query('select p.id, p.name, p.age, t.name, t.species '

@@ -6,7 +6,7 @@ import 'package:sqljocky5/sqljocky.dart';
 import 'package:sqljocky5/utils.dart';
 import 'package:test/test.dart';
 
-Future setup(ConnectionPool pool, String tableName, String createSql,
+Future<Null> setup(ConnectionPool pool, String tableName, String createSql,
     [String insertSql]) async {
   await new TableDropper(pool, [tableName]).dropTables();
   var result = await pool.query(createSql);

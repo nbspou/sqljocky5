@@ -1,6 +1,6 @@
 part of integrationtests;
 
-Future deleteInsertSelect(ConnectionPool pool, table, insert, select) async {
+Future<Null> deleteInsertSelect(ConnectionPool pool, table, insert, select) async {
   await pool.query('delete from $table');
   await pool.query(insert);
   return pool.query(select);

@@ -103,7 +103,7 @@ class Connection {
    * when this has happened. The future's value is an OkPacket if the connection
    * is succesful.
    */
-  Future connect(
+  Future<Null> connect(
       {String host,
       int port,
       String user,
@@ -153,12 +153,12 @@ class Connection {
     }
   }
 
-  Future _useDatabase(String dbName) {
+  Future<Null> _useDatabase(String dbName) {
     var handler = new UseDbHandler(dbName);
     return processHandler(handler);
   }
 
-  Future readPacket() async {
+  Future<Null> readPacket() async {
     log.fine("readPacket readyForHeader=${_readyForHeader}");
     if (_readyForHeader) {
       _readyForHeader = false;
@@ -273,7 +273,7 @@ class Connection {
     }
   }
 
-  Future sendBuffer(Buffer buffer) {
+  Future<Null> sendBuffer(Buffer buffer) {
     if (buffer.length > _maxPacketSize) {
       throw createMySqlClientError(
           "Buffer length (${buffer.length}) bigger than maxPacketSize ($_maxPacketSize)");

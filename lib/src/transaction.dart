@@ -15,11 +15,11 @@ abstract class Transaction extends QueriableConnection {
    * Commits the transaction and released the connection. An error will be thrown
    * if any queries are executed after calling commit.
    */
-  Future commit();
+  Future<Null> commit();
 
   /**
    * Rolls back the transaction and released the connection. An error will be thrown
    * if any queries are executed after calling rollback.
    */
-  Future rollback();
+  Future<Null> rollback();
 }

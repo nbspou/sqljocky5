@@ -18,7 +18,7 @@ abstract class Query {
   String get sql;
 
   /// Closes this query and removes it from all connections in the pool.
-  Future close();
+  Future<Null> close();
 
   /**
    * Executes the query, returning a future [Results] object.

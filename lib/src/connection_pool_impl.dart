@@ -174,7 +174,7 @@ class ConnectionPoolImpl extends Object
   }
 
 // dangerous - would need to switch all connections
-//  Future useDatabase(String dbName) {
+//  Future<Null> useDatabase(String dbName) {
 //    return _getConnection()
 //    .then((cnx) {
 //      var handler = new _UseDbHandler(dbName);
@@ -232,7 +232,7 @@ class ConnectionPoolImpl extends Object
   /**
    * Pings the server. Returns a [Future] that completes when the server replies.
    */
-  Future ping() async {
+  Future<Null> ping() async {
     _log.info("Pinging server");
 
     var cnx = await getConnectionInternal();
@@ -245,7 +245,7 @@ class ConnectionPoolImpl extends Object
    * Sends a debug message to the server. Returns a [Future] that completes
    * when the server replies.
    */
-  Future debug() async {
+  Future<Null> debug() async {
     _log.info("Sending debug message");
 
     var cnx = await getConnectionInternal();
@@ -261,7 +261,7 @@ class ConnectionPoolImpl extends Object
   // Close a prepared query on all connections which have this query.
   // This may take some time if it has to wait a long time for a
   // connection to become free.
-  Future closeQuery(Query q, bool retain) async {
+  Future<Null> closeQuery(Query q, bool retain) async {
     _log.finest("Closing query: ${q.sql}");
     var thePool = new List<Connection>();
     thePool.addAll(_pool); // prevent concurrent modification
@@ -349,7 +349,7 @@ class ConnectionPoolImpl extends Object
    * The transaction will be automatically rolled back in case it has not
    * been released, or in case an exception occured during the transaction.
    */
-  Future startTransaction(Future handler(Transaction transaction), {bool consistent: false}) async {
+  Future<Null> startTransaction(Future<void> handler(Transaction transaction), {bool consistent: false}) async {
     TransactionImpl transaction = await _startTransaction(consistent: consistent);
     try {
       await handler(transaction);

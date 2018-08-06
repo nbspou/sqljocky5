@@ -18,7 +18,7 @@ import 'results/results.dart';
 class TransactionImpl extends _RetainedConnectionBase implements Transaction {
   TransactionImpl(cnx, pool) : super(cnx, pool);
 
-  Future commit() async {
+  Future<Null> commit() async {
     _checkReleased();
     _released = true;
 
@@ -30,7 +30,7 @@ class TransactionImpl extends _RetainedConnectionBase implements Transaction {
     return results;
   }
 
-  Future rollback() async {
+  Future<Null> rollback() async {
     _checkReleased();
     _released = true;
 
@@ -48,7 +48,7 @@ class TransactionImpl extends _RetainedConnectionBase implements Transaction {
     }
   }
 
-  Future release() async {
+  Future<Null> release() async {
     if (!_released) {
       await rollback();
     }
@@ -111,7 +111,7 @@ class RetainedConnectionImpl extends _RetainedConnectionBase
     implements RetainedConnection {
   RetainedConnectionImpl(cnx, pool) : super(cnx, pool);
 
-  Future release() {
+  Future<Null> release() {
     _checkReleased();
     _released = true;
 

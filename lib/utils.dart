@@ -23,7 +23,7 @@ class TableDropper {
    * returned [Future] completes when all the tables have been dropped.
    * If a table doesn't exist, it is ignored.
    */
-  Future dropTables() async {
+  Future<Null> dropTables() async {
     for (var table in tables) {
       try {
         await pool.query('drop table $table');
@@ -58,7 +58,7 @@ class QueryRunner {
    * returned [Future] completes when all the queries have been executed.
    * Results are ignored.
    */
-  Future executeQueries() async {
+  Future<Null> executeQueries() async {
     for (var query in queries) {
       await pool.query(query);
     }

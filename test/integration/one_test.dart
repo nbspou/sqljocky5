@@ -276,7 +276,7 @@ void main() {
   });
 }
 
-Future _showResults(Results results) {
+Future<Null> _showResults(Results results) {
   var c = new Completer();
   var fieldNames = <String>[];
   for (var field in results.fields) {
