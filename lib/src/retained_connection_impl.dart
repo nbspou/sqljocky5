@@ -18,7 +18,7 @@ import 'results/results.dart';
 class TransactionImpl extends _RetainedConnectionBase implements Transaction {
   TransactionImpl(cnx, pool) : super(cnx, pool);
 
-  Future<Null> commit() async {
+  Future<dynamic> commit() async {
     _checkReleased();
     _released = true;
 
@@ -30,7 +30,7 @@ class TransactionImpl extends _RetainedConnectionBase implements Transaction {
     return results;
   }
 
-  Future<Null> rollback() async {
+  Future<dynamic> rollback() async {
     _checkReleased();
     _released = true;
 
@@ -94,7 +94,7 @@ abstract class _RetainedConnectionBase extends Object
     var query = await prepare(sql);
     var results = await query.execute(parameters);
     //TODO is it right to close here? Query might still be running
-    query.close();
+    await query.close();
     return new Future.value(results);
   }
 
@@ -111,14 +111,14 @@ class RetainedConnectionImpl extends _RetainedConnectionBase
     implements RetainedConnection {
   RetainedConnectionImpl(cnx, pool) : super(cnx, pool);
 
-  Future<Null> release() {
+  Future<dynamic> release() {
     _checkReleased();
     _released = true;
 
     _cnx.inTransaction = false;
     _cnx.release();
     _pool.reuseConnectionForQueuedOperations(_cnx);
-    return new Future.value();
+    return new Future<dynamic>.value();
   }
 
   void _checkReleased() {

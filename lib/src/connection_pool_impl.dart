@@ -174,7 +174,7 @@ class ConnectionPoolImpl extends Object
   }
 
 // dangerous - would need to switch all connections
-//  Future<Null> useDatabase(String dbName) {
+//  Future<dynamic> useDatabase(String dbName) async {
 //    return _getConnection()
 //    .then((cnx) {
 //      var handler = new _UseDbHandler(dbName);
@@ -232,7 +232,7 @@ class ConnectionPoolImpl extends Object
   /**
    * Pings the server. Returns a [Future] that completes when the server replies.
    */
-  Future<Null> ping() async {
+  Future<dynamic> ping() async {
     _log.info("Pinging server");
 
     var cnx = await getConnectionInternal();
@@ -245,7 +245,7 @@ class ConnectionPoolImpl extends Object
    * Sends a debug message to the server. Returns a [Future] that completes
    * when the server replies.
    */
-  Future<Null> debug() async {
+  Future<dynamic> debug() async {
     _log.info("Sending debug message");
 
     var cnx = await getConnectionInternal();

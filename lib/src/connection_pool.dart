@@ -54,12 +54,12 @@ abstract class ConnectionPool implements QueriableConnection {
    * Sends a debug message to the server. Returns a [Future] that completes
    * when the server replies.
    */
-  Future<Null> debug();
+  Future<dynamic> debug();
 
   /**
    * Pings the server. Returns a [Future] that completes when the server replies.
    */
-  Future<Null> ping();
+  Future<dynamic> ping();
 
   Future<Results> prepareExecute(String sql, List parameters);
 

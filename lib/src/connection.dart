@@ -103,7 +103,7 @@ class Connection {
    * when this has happened. The future's value is an OkPacket if the connection
    * is succesful.
    */
-  Future<Null> connect(
+  Future<dynamic> connect(
       {String host,
       int port,
       String user,
@@ -112,7 +112,7 @@ class Connection {
       int characterSet,
       bool useCompression,
       bool useSSL}) async {
-    if (socket != null) {
+    if (socket != null) async {
       throw createMySqlClientError(
           "Cannot connect to server while a connection is already open");
     }
@@ -120,7 +120,7 @@ class Connection {
     _handler = new HandshakeHandler(
         user, password, _maxPacketSize, db, characterSet, useCompression, useSSL);
 
-    _completer = new Completer();
+    _completer = new Completer<dynamic>();
     log.fine("opening connection to $host:$port/$db");
     BufferedSocket.connect(host, port,
         onConnection: (s) {
@@ -147,15 +147,15 @@ class Connection {
     //TODO On the other hand, it doesn't hurt to call useDatabase anyway.
     if (useSSL) {
       await _completer.future;
-      return _useDatabase(db);
+      return await _useDatabase(db);
     } else {
-      return _completer.future;
+      return await _completer.future;
     }
   }
 
-  Future<Null> _useDatabase(String dbName) {
+  Future<dynamic> _useDatabase(String dbName) async {
     var handler = new UseDbHandler(dbName);
-    return processHandler(handler);
+    return await processHandler(handler);
   }
 
   Future<Null> readPacket() async {
@@ -167,7 +167,7 @@ class Connection {
     }
   }
 
-  _handleHeader(buffer) async {
+  Future<Null> _handleHeader(buffer) async {
     _dataSize = buffer[0] + (buffer[1] << 8) + (buffer[2] << 16);
     _packetNumber = buffer[3];
     log.fine("about to read $_dataSize bytes for packet ${_packetNumber}");
@@ -337,7 +337,7 @@ class Connection {
     if (noResponse) {
       _finishAndReuse();
     }
-    return _completer.future;
+    return await _completer.future;
   }
 
   PreparedQuery removePreparedQueryFromCache(String sql) {
