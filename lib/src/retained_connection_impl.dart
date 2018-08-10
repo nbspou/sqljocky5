@@ -75,10 +75,10 @@ abstract class _RetainedConnectionBase extends Object
 
   _RetainedConnectionBase(this._cnx, this._pool) : _released = false;
 
-  Future<Results> query(String sql) {
+  Future<Results> query(String sql) async {
     _checkReleased();
     var handler = new QueryStreamHandler(sql);
-    return _cnx.processHandler(handler);
+    return await _cnx.processHandler(handler);
   }
 
   Future<Query> prepare(String sql) async {
