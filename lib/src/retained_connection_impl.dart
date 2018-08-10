@@ -111,14 +111,13 @@ class RetainedConnectionImpl extends _RetainedConnectionBase
     implements RetainedConnection {
   RetainedConnectionImpl(cnx, pool) : super(cnx, pool);
 
-  Future<dynamic> release() {
+  Future<Null> release() async {
     _checkReleased();
     _released = true;
 
     _cnx.inTransaction = false;
     _cnx.release();
     _pool.reuseConnectionForQueuedOperations(_cnx);
-    return new Future<dynamic>.value();
   }
 
   void _checkReleased() {
