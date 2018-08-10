@@ -273,7 +273,7 @@ class Connection {
     }
   }
 
-  Future<Null> sendBuffer(Buffer buffer) {
+  Future<Buffer> sendBuffer(Buffer buffer) async {
     if (buffer.length > _maxPacketSize) {
       throw createMySqlClientError(
           "Buffer length (${buffer.length}) bigger than maxPacketSize ($_maxPacketSize)");
@@ -289,10 +289,10 @@ class Connection {
           .writeUint24(encodedHeader.length + encodedBuffer.length);
       _compressedHeaderBuffer.writeByte(++_compressedPacketNumber);
       _compressedHeaderBuffer.writeUint24(4 + buffer.length);
-      return socket.writeBuffer(_compressedHeaderBuffer);
+      return await socket.writeBuffer(_compressedHeaderBuffer);
     } else {
       log.fine("sendBuffer header");
-      return _sendBufferPart(buffer, 0);
+      return await _sendBufferPart(buffer, 0);
     }
   }
 
