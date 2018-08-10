@@ -112,7 +112,7 @@ class Connection {
       int characterSet,
       bool useCompression,
       bool useSSL}) async {
-    if (socket != null) async {
+    if (socket != null) {
       throw createMySqlClientError(
           "Cannot connect to server while a connection is already open");
     }
