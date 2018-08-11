@@ -122,7 +122,7 @@ class Connection {
 
     _completer = new Completer<dynamic>();
     log.fine("opening connection to $host:$port/$db");
-    BufferedSocket.connect(host, port,
+    await BufferedSocket.connect(host, port,
         onConnection: (s) {
           socket = s;
         },
@@ -131,11 +131,12 @@ class Connection {
           release();
           log.fine("done");
         },
-        onError: (error) {
+        onError: (error, stack) {
           log.fine("error $error");
           release();
           if (_completer.isCompleted) {
-            throw error;
+            log.severe("Exception Unhandled in Connection: $error\n$stack");
+            // throw error; // Unhandled when thrown from here
           } else {
             _completer.completeError(error);
           }

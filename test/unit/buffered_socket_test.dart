@@ -34,16 +34,16 @@ class MockSocket extends StreamView<RawSocketEvent> implements RawSocket {
 
   addData(List<int> data) {
     _data.addAll(data);
-    _streamController.add(RawSocketEvent.READ);
+    _streamController.add(RawSocketEvent.read);
   }
 
   closeRead() {
-    _streamController.add(RawSocketEvent.READ_CLOSED);
+    _streamController.add(RawSocketEvent.readClosed);
   }
 
   void set writeEventsEnabled(bool value) {
     if (value) {
-      _streamController.add(RawSocketEvent.WRITE);
+      _streamController.add(RawSocketEvent.write);
     }
   }
 
@@ -54,7 +54,7 @@ class MockSocket extends StreamView<RawSocketEvent> implements RawSocket {
 }
 
 class MockBuffer extends Mock implements Buffer {
-  noSuchMethod(a) => super.noSuchMethod(a);
+  //noSuchMethod(a) => super.noSuchMethod(a);
 }
 
 void main() {
@@ -80,7 +80,7 @@ void main() {
         await socket.readBuffer(buffer);
         expect(buffer.list, equals([1, 2, 3, 4]));
         c.complete();
-      }, onDone: () {}, onError: (e) {}, socketFactory: factory);
+      }, onDone: () {}, onError: (error, stack) { }, socketFactory: factory);
       socket = thesocket;
       rawSocket.addData([1, 2, 3, 4]);
       return c.future;
@@ -98,7 +98,7 @@ void main() {
           c.complete();
         });
         rawSocket.addData([3, 4]);
-      }, onDone: () {}, onError: (e) {}, socketFactory: factory);
+      }, onDone: () {}, onError: (error, stack) { }, socketFactory: factory);
       socket = thesocket;
       rawSocket.addData([1, 2]);
       return c.future;
@@ -109,7 +109,7 @@ void main() {
       var socket = await BufferedSocket.connect('localhost', 100,
           onDataReady: () {},
           onDone: () {},
-          onError: (e) {},
+          onError: (error, stack) { },
           socketFactory: factory);
       var buffer = new Buffer(4);
       socket.readBuffer(buffer).then((_) {
@@ -126,7 +126,7 @@ void main() {
       var socket = await BufferedSocket.connect('localhost', 100,
           onDataReady: () {},
           onDone: () {},
-          onError: (e) {},
+          onError: (error, stack) { },
           socketFactory: factory);
       var buffer = new Buffer(4);
       socket.readBuffer(buffer).then((_) {
@@ -142,7 +142,7 @@ void main() {
       var socket = await BufferedSocket.connect('localhost', 100,
           onDataReady: () {},
           onDone: () {},
-          onError: (e) {},
+          onError: (error, stack) { },
           socketFactory: factory);
       var buffer = new Buffer(4);
       socket.readBuffer(buffer).then((_) {
@@ -157,7 +157,7 @@ void main() {
       var socket = await BufferedSocket.connect('localhost', 100,
           onDataReady: () {},
           onDone: () {},
-          onError: (e) {},
+          onError: (error, stack) { },
           socketFactory: factory);
       var buffer = new MockBuffer();
       when(buffer.length).thenReturn(100);
@@ -170,7 +170,7 @@ void main() {
       var socket = await BufferedSocket.connect('localhost', 100,
           onDataReady: () {},
           onDone: () {},
-          onError: (e) {},
+          onError: (error, stack) { },
           socketFactory: factory);
       var buffer = new MockBuffer();
       when(buffer.length).thenReturn(100);
@@ -187,7 +187,7 @@ void main() {
       await BufferedSocket.connect('localhost', 100,
           onDataReady: () {},
           onDone: () {},
-          onError: (e) {},
+          onError: (error, stack) { },
           onClosed: onClosed,
           socketFactory: factory);
       await rawSocket.closeRead();

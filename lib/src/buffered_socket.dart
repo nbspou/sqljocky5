@@ -5,7 +5,7 @@ import 'dart:async';
 import 'package:logging/logging.dart';
 import 'buffer.dart';
 
-typedef ErrorHandler(AsyncError);
+typedef ErrorHandler(error, stack);
 typedef DoneHandler();
 typedef DataReadyHandler();
 typedef ClosedHandler();
@@ -45,9 +45,9 @@ class BufferedSocket {
         onError: _onSocketError, onDone: _onSocketDone, cancelOnError: true);
   }
 
-  _onSocketError(error) {
+  _onSocketError(error, stack) {
     if (onError != null) {
-      onError(error);
+      onError(error, stack);
     }
   }
 
@@ -78,8 +78,8 @@ class BufferedSocket {
         onConnection(bufferedSocket);
       }
       return bufferedSocket;
-    } catch (e) {
-      onError(e);
+    } catch (error, stack) {
+      onError(error, stack);
     }
     return null;
   }
