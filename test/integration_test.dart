@@ -3,7 +3,7 @@ library integrationtests;
 import 'dart:async';
 
 import 'package:logging/logging.dart';
-import 'package:options_file/options_file.dart';
+// import 'package:options_file/options_file.dart';
 import 'package:sqljocky5/sqljocky.dart';
 import 'package:test/test.dart';
 
@@ -38,7 +38,7 @@ void main() {
   };
   Logger.root.onRecord.listen(listener);
 
-  var options = new OptionsFile('connection.options');
+  dynamic options = null; // var options = new OptionsFile('connection.options');
   var user = options.getString('user');
   var password = options.getString('password', null);
   var port = options.getInt('port', 3306);

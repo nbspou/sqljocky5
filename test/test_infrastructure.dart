@@ -1,6 +1,6 @@
 library sqljocky.test.test_infrastructure;
 
-import 'package:options_file/options_file.dart';
+// import 'package:options_file/options_file.dart';
 import 'package:sqljocky5/sqljocky.dart';
 import 'package:test/test.dart';
 
@@ -10,7 +10,7 @@ ConnectionPool get pool => _pool;
 ConnectionPool _pool;
 
 void initializeTest([String tableName, String createSql]) {
-  var options = new OptionsFile('connection.options');
+  dynamic options = null; // var options = null; // new OptionsFile('connection.options');
   var user = options.getString('user');
   var password = options.getString('password', null);
   var port = options.getInt('port', 3306);

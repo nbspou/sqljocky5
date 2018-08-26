@@ -1,6 +1,6 @@
 import 'package:sqljocky5/sqljocky.dart';
 import 'package:sqljocky5/utils.dart';
-import 'package:options_file/options_file.dart';
+// import 'package:options_file/options_file.dart';
 import 'dart:async';
 
 /*
@@ -97,7 +97,7 @@ class Example {
 }
 
 main() async {
-  OptionsFile options = new OptionsFile('connection.options');
+  dynamic options = null; // OptionsFile options = new OptionsFile('connection.options');
   String user = options.getString('user');
   String password = options.getString('password');
   int port = options.getInt('port', 3306);

@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:logging/logging.dart';
-import 'package:options_file/options_file.dart';
+// import 'package:options_file/options_file.dart';
 import 'package:sqljocky5/sqljocky.dart';
 import 'package:sqljocky5/utils.dart';
 
@@ -108,7 +108,7 @@ main() async {
   var log = new Logger("SqlJocky.Speed");
   log.level = Level.ALL;
 
-  var options = new OptionsFile('connection.options');
+  dynamic options = null; // var options = null; // new OptionsFile('connection.options');
   var user = options.getString('user');
   var password = options.getString('password');
   var port = options.getInt('port', 3306);
