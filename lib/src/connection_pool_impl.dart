@@ -26,6 +26,12 @@ import 'query/query_stream_handler.dart';
 
 import 'results/results.dart';
 
+class PendingConnection {
+  final Completer<Connection> completer;
+  final Timer timer;
+  const PendingConnection(this.completer, this.timer);
+}
+
 class ConnectionPoolImpl extends Object
     with ConnectionHelpers
     implements ConnectionPool, QueriableConnection {
@@ -47,7 +53,7 @@ class ConnectionPoolImpl extends Object
    * is a connection in the queue then it is 'activated' - that is, the future returned
    * by _getConnection() completes.
    */
-  final Queue<Completer<Connection>> _pendingConnections;
+  final Queue<PendingConnection> _pendingConnections;
   /*
    * If you need a particular connection, put an entry in _requestedConnections. As soon as
    * that connection is free then the completer completes. _requestedConnections is
@@ -66,7 +72,7 @@ class ConnectionPoolImpl extends Object
       int max: 5,
       int maxPacketSize: 16 * 1024 * 1024,
       bool useSSL: false})
-      : _pendingConnections = new Queue<Completer<Connection>>(),
+      : _pendingConnections = new Queue<PendingConnection>(),
         _requestedConnections = new Map<Connection, Queue<Completer>>(),
         _pool = new List<Connection>(),
         _host = host,
@@ -101,7 +107,14 @@ class ConnectionPoolImpl extends Object
       _createConnection(c);
     } else {
       _log.finest("Waiting for an available connection");
-      _pendingConnections.add(c);
+      Timer timer = Timer(new Duration(seconds: 5), () {
+        if (!c.isCompleted) {
+          _log.severe("Timeout while waiting for an available connection, exceed pool size");
+          _pendingConnections.removeWhere((pending) => pending.completer == c);
+          _createConnection(c);
+        }
+      });
+      _pendingConnections.add(new PendingConnection(c, timer));
     }
     return c.future;
   }
@@ -169,7 +182,8 @@ class ConnectionPoolImpl extends Object
       _log.finest("Reusing cnx#${cnx.number} for a queued operation");
       var c = _pendingConnections.removeFirst();
       cnx.use();
-      c.complete(cnx);
+      c.completer.complete(cnx);
+      c.timer.cancel();
     }
   }
 
