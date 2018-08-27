@@ -122,6 +122,7 @@ class Connection {
 
     _completer = new Completer<dynamic>();
     log.fine("opening connection to $host:$port/$db");
+    bool closed = false;
     await BufferedSocket.connect(host, port,
         onConnection: (s) {
           socket = s;
@@ -135,7 +136,10 @@ class Connection {
           log.fine("error $error");
           if (_completer == null) {
             log.severe("Exception in idle connection, close: $error\n$stack");
-            close();
+            if (!closed) {
+              closed = true;
+              close();
+            }
           } else {
             release();
             if (_completer.isCompleted) {
@@ -149,7 +153,10 @@ class Connection {
           }
         },
         onClosed: () {
-          close();
+          if (!closed) {
+            closed = true;
+            close();
+          }
         });
     //TODO Only useDatabase if connection actually ended up as an SSL connection?
     //TODO On the other hand, it doesn't hurt to call useDatabase anyway.
