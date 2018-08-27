@@ -133,12 +133,19 @@ class Connection {
         },
         onError: (error, stack) {
           log.fine("error $error");
-          release();
-          if (_completer.isCompleted) {
-            log.severe("Exception Unhandled in Connection: $error\n$stack");
-            // throw error; // Unhandled when thrown from here
+          if (_completer == null) {
+            log.severe("Exception in idle connection, close: $error\n$stack");
+            close();
           } else {
-            _completer.completeError(error);
+            release();
+            if (_completer.isCompleted) {
+              // log.severe("Exception Unhandled in Connection: $error\n$stack");
+              throw error; // Unhandled when thrown from here
+            } else {
+              Completer<dynamic> completer = _completer;
+              _completer = null;
+              completer.completeError(error);
+            }
           }
         },
         onClosed: () {
@@ -146,12 +153,15 @@ class Connection {
         });
     //TODO Only useDatabase if connection actually ended up as an SSL connection?
     //TODO On the other hand, it doesn't hurt to call useDatabase anyway.
-    if (useSSL) {
-      await _completer.future;
-      return await _useDatabase(db);
-    } else {
-      return await _completer.future;
+    if (_completer != null) {
+      if (useSSL) {
+        await _completer.future;
+        return await _useDatabase(db);
+      } else {
+        return await _completer.future;
+      }
     }
+    return null;
   }
 
   Future<dynamic> _useDatabase(String dbName) async {
@@ -235,20 +245,23 @@ class Connection {
         _finishAndReuse();
       }
       if (response.hasResult) {
-        if (_completer.isCompleted) {
-          _completer
-              .completeError(new StateError("Request has already completed"));
+        if (_completer == null || _completer.isCompleted) {
+          throw new StateError("Request has already completed");
         }
-        _completer.complete(response.result);
+        Completer<dynamic> completer = _completer;
+        _completer = null;
+        completer.complete(response.result);
       }
     } catch (e, st) {
       autoRelease = true;
       _finishAndReuse();
       log.fine("completing with exception: $e");
-      if (_completer.isCompleted) {
-        throw e;
+      if (_completer == null || _completer.isCompleted) {
+        rethrow;
       }
-      _completer.completeError(e, st);
+      Completer<dynamic> completer = _completer;
+      _completer = null;
+      completer.completeError(e, st);
     }
   }
 
@@ -331,6 +344,7 @@ class Connection {
     _packetNumber = -1;
     _compressedPacketNumber = -1;
     _completer = new Completer<dynamic>();
+    Completer<dynamic> completer = _completer;
     if (!noResponse) {
       _handler = handler;
     }
@@ -338,7 +352,7 @@ class Connection {
     if (noResponse) {
       _finishAndReuse();
     }
-    return await _completer.future;
+    return await completer.future;
   }
 
   PreparedQuery removePreparedQueryFromCache(String sql) {
