@@ -55,7 +55,7 @@ class Buffer {
    * Returns the number of bytes read.
    */
   int readFromSocket(RawSocket socket, int count) {
-    Uint8List bytes = socket.read(count);
+    List<int> bytes = socket.read(count);
     int bytesRead = bytes.length;
     _list.setRange(_writePos, _writePos + bytesRead, bytes);
     _writePos += bytesRead;
@@ -388,8 +388,8 @@ class Buffer {
   /**
    * Returns a list of the given [numberOfBytes], read from the buffer.
    */
-  Uint8List readList(int numberOfBytes) {
-    Uint8List list = _list.sublist(_readPos, _readPos + numberOfBytes);
+  List<int> readList(int numberOfBytes) {
+    List<int> list = _list.sublist(_readPos, _readPos + numberOfBytes);
     _readPos += numberOfBytes;
     return list;
   }
@@ -397,7 +397,7 @@ class Buffer {
   /**
    * Writes the give [list] of bytes to the buffer.
    */
-  void writeList(Uint8List list) {
+  void writeList(List<int> list) {
     _list.setRange(_writePos, _writePos + list.length, list);
     _writePos += list.length;
   }
