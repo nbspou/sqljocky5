@@ -1,6 +1,7 @@
 library sqljocky.auth_handler;
 
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:crypto/crypto.dart';
 import 'package:logging/logging.dart';
@@ -28,10 +29,10 @@ class AuthHandler extends Handler {
       int this.characterSet,
       ) : super(new Logger("SqlJocky.AuthHandler"));
 
-  List<int> getHash() {
-    List<int> hash;
+  Uint8List getHash() {
+    Uint8List hash;
     if (password == null) {
-      hash = <int>[];
+      hash = new Uint8List(0);
     } else {
       final hashedPassword = sha1.convert(utf8.encode(password)).bytes;
       final doubleHashedPassword = sha1.convert(hashedPassword).bytes;
@@ -40,7 +41,7 @@ class AuthHandler extends Handler {
         ..addAll(doubleHashedPassword);
       final hashedSaltedPassword = sha1.convert(bytes).bytes;
 
-      hash = new List<int>(hashedSaltedPassword.length);
+      hash = new Uint8List(hashedSaltedPassword.length);
       for (var i = 0; i < hash.length; i++) {
         hash[i] = hashedSaltedPassword[i] ^ hashedPassword[i];
       }

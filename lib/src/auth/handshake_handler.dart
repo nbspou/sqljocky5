@@ -1,6 +1,7 @@
 library sqljocky.handshake_handler;
 
 import 'dart:math' as math;
+import 'dart:typed_data';
 
 import 'package:logging/logging.dart';
 
@@ -24,7 +25,7 @@ class HandshakeHandler extends Handler {
   int protocolVersion;
   String serverVersion;
   int threadId;
-  List<int> scrambleBuffer;
+  Uint8List scrambleBuffer;
   int serverCapabilities;
   int serverLanguage;
   int serverStatus;
@@ -77,7 +78,7 @@ class HandshakeHandler extends Handler {
         // read null-terminator
         response.readByte();
         scrambleBuffer =
-            new List<int>(scrambleBuffer1.length + scrambleBuffer2.length);
+            new Uint8List(scrambleBuffer1.length + scrambleBuffer2.length);
         scrambleBuffer.setRange(0, 8, scrambleBuffer1);
         scrambleBuffer.setRange(8, 8 + scrambleBuffer2.length, scrambleBuffer2);
       } else {

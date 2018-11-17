@@ -55,7 +55,7 @@ class Buffer {
    * Returns the number of bytes read.
    */
   int readFromSocket(RawSocket socket, int count) {
-    List<int> bytes = socket.read(count);
+    Uint8List bytes = socket.read(count);
     int bytesRead = bytes.length;
     _list.setRange(_writePos, _writePos + bytesRead, bytes);
     _writePos += bytesRead;
@@ -137,7 +137,7 @@ class Buffer {
    * Reads a null terminated list of ints from the buffer.
    * Returns the list of ints from the buffer, without the terminating zero
    */
-  List<int> readNullTerminatedList() {
+  Uint8List readNullTerminatedList() {
     List<int> s = <int>[];
     while (_list[_readPos] != 0) {
       s.add(_list[_readPos]);
@@ -152,7 +152,7 @@ class Buffer {
    * Writes a null terminated list of ints from the buffer. The given [list]
    * should not contain the terminating zero.
    */
-  void writeNullTerminatedList(List<int> list) {
+  void writeNullTerminatedList(Uint8List list) {
     writeList(list);
     writeByte(0);
   }
@@ -388,8 +388,8 @@ class Buffer {
   /**
    * Returns a list of the given [numberOfBytes], read from the buffer.
    */
-  List<int> readList(int numberOfBytes) {
-    List<int> list = _list.sublist(_readPos, _readPos + numberOfBytes);
+  Uint8List readList(int numberOfBytes) {
+    Uint8List list = _list.sublist(_readPos, _readPos + numberOfBytes);
     _readPos += numberOfBytes;
     return list;
   }
@@ -397,7 +397,7 @@ class Buffer {
   /**
    * Writes the give [list] of bytes to the buffer.
    */
-  void writeList(List<int> list) {
+  void writeList(Uint8List list) {
     _list.setRange(_writePos, _writePos + list.length, list);
     _writePos += list.length;
   }

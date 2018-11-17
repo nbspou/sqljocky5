@@ -2,6 +2,7 @@ library sqljocky.test.one_test;
 
 import 'dart:async';
 
+import 'package:fixnum/fixnum.dart';
 import 'package:sqljocky5/sqljocky.dart';
 import 'package:sqljocky5/constants.dart';
 import 'package:sqljocky5/utils.dart';
@@ -297,6 +298,8 @@ String _typeof(dynamic item) {
     return "String";
   } else if (item is int) {
     return "int";
+  } else if (item is Int64) {
+    return "Int64";
   } else if (item is double) {
     return "double";
   } else if (item is DateTime) {

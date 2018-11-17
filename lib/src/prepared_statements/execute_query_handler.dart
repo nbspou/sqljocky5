@@ -2,8 +2,10 @@ library sqljocky.execute_query_handler;
 
 import 'dart:async';
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:logging/logging.dart';
+import 'package:fixnum/fixnum.dart';
 
 import '../../constants.dart';
 import '../buffer.dart';
@@ -46,7 +48,7 @@ class ExecuteQueryHandler extends Handler {
 
   Buffer createRequest() {
     var length = 0;
-    var types = new List<int>(_values.length * 2);
+    var types = new Uint8List(_values.length * 2);
     var nullMap = createNullMap();
     preparedValues = new List(_values.length);
     for (var i = 0; i < _values.length; i++) {
@@ -63,7 +65,7 @@ class ExecuteQueryHandler extends Handler {
 
   prepareValue(value) {
     if (value != null) {
-      if (value is int) {
+      if (value is int || value is Int64) {
         return _prepareInt(value);
       } else if (value is double) {
         return _prepareDouble(value);
@@ -71,12 +73,14 @@ class ExecuteQueryHandler extends Handler {
         return _prepareDateTime(value);
       } else if (value is bool) {
         return _prepareBool(value);
-      } else if (value is List<int>) {
+      } else if (value is List<int> || value is Uint8List) {
         return _prepareList(value);
       } else if (value is Blob) {
         return _prepareBlob(value);
-      } else {
+      } else if (value is String) {
         return _prepareString(value);
+      } else {
+        throw new Exception("Invalid type for value '$value'");
       }
     }
     return value;
@@ -84,7 +88,7 @@ class ExecuteQueryHandler extends Handler {
 
   measureValue(value, preparedValue) {
     if (value != null) {
-      if (value is int) {
+      if (value is int || value is Int64) {
         return _measureInt(value, preparedValue);
       } else if (value is double) {
         return _measureDouble(value, preparedValue);
@@ -92,7 +96,7 @@ class ExecuteQueryHandler extends Handler {
         return _measureDateTime(value, preparedValue);
       } else if (value is bool) {
         return _measureBool(value, preparedValue);
-      } else if (value is List<int>) {
+      } else if (value is List<int> || value is Uint8List) {
         return _measureList(value, preparedValue);
       } else if (value is Blob) {
         return _measureBlob(value, preparedValue);
@@ -105,7 +109,7 @@ class ExecuteQueryHandler extends Handler {
 
   _getType(value) {
     if (value != null) {
-      if (value is int) {
+      if (value is int || value is Int64) {
         return FIELD_TYPE_LONGLONG;
       } else if (value is double) {
         return FIELD_TYPE_VARCHAR;
@@ -113,7 +117,7 @@ class ExecuteQueryHandler extends Handler {
         return FIELD_TYPE_DATETIME;
       } else if (value is bool) {
         return FIELD_TYPE_TINY;
-      } else if (value is List<int>) {
+      } else if (value is List<int> || value is Uint8List) {
         return FIELD_TYPE_BLOB;
       } else if (value is Blob) {
         return FIELD_TYPE_BLOB;
@@ -127,7 +131,7 @@ class ExecuteQueryHandler extends Handler {
 
   _writeValue(value, preparedValue, Buffer buffer) {
     if (value != null) {
-      if (value is int) {
+      if (value is int || value is Int64) {
         _writeInt(value, preparedValue, buffer);
       } else if (value is double) {
         _writeDouble(value, preparedValue, buffer);
@@ -135,7 +139,7 @@ class ExecuteQueryHandler extends Handler {
         _writeDateTime(value, preparedValue, buffer);
       } else if (value is bool) {
         _writeBool(value, preparedValue, buffer);
-      } else if (value is List<int>) {
+      } else if (value is List<int> || value is Uint8List) {
         _writeList(value, preparedValue, buffer);
       } else if (value is Blob) {
         _writeBlob(value, preparedValue, buffer);
@@ -145,8 +149,8 @@ class ExecuteQueryHandler extends Handler {
     }
   }
 
-  _prepareInt(value) {
-    return value;
+  int _prepareInt(value) {
+    return value.toInt();
   }
 
   int _measureInt(value, preparedValue) {
@@ -160,15 +164,15 @@ class ExecuteQueryHandler extends Handler {
 //            types.add(0);
 //            values.add(value & 0xFF);
 //          } else {
-    log.fine("LONG: $value");
-    buffer.writeByte(value >> 0x00 & 0xFF);
-    buffer.writeByte(value >> 0x08 & 0xFF);
-    buffer.writeByte(value >> 0x10 & 0xFF);
-    buffer.writeByte(value >> 0x18 & 0xFF);
-    buffer.writeByte(value >> 0x20 & 0xFF);
-    buffer.writeByte(value >> 0x28 & 0xFF);
-    buffer.writeByte(value >> 0x30 & 0xFF);
-    buffer.writeByte(value >> 0x38 & 0xFF);
+    log.fine("LONG: $preparedValue");
+    buffer.writeByte(preparedValue >> 0x00 & 0xFF);
+    buffer.writeByte(preparedValue >> 0x08 & 0xFF);
+    buffer.writeByte(preparedValue >> 0x10 & 0xFF);
+    buffer.writeByte(preparedValue >> 0x18 & 0xFF);
+    buffer.writeByte(preparedValue >> 0x20 & 0xFF);
+    buffer.writeByte(preparedValue >> 0x28 & 0xFF);
+    buffer.writeByte(preparedValue >> 0x30 & 0xFF);
+    buffer.writeByte(preparedValue >> 0x38 & 0xFF);
 //          }
   }
 
@@ -271,9 +275,9 @@ class ExecuteQueryHandler extends Handler {
     buffer.writeList(preparedValue);
   }
 
-  List<int> createNullMap() {
+  Uint8List createNullMap() {
     var bytes = ((_values.length + 7) / 8).floor().toInt();
-    var nullMap = new List<int>(bytes);
+    var nullMap = new Uint8List(bytes);
     var byte = 0;
     var bit = 0;
     for (var i = 0; i < _values.length; i++) {
@@ -293,7 +297,7 @@ class ExecuteQueryHandler extends Handler {
     return nullMap;
   }
 
-  Buffer writeValuesToBuffer(List<int> nullMap, int length, List<int> types) {
+  Buffer writeValuesToBuffer(List<int> nullMap, int length, Uint8List types) {
     var buffer = new Buffer(10 + nullMap.length + 1 + types.length + length);
     buffer.writeByte(COM_STMT_EXECUTE);
     buffer.writeUint32(_preparedQuery.statementHandlerId);

@@ -1,6 +1,7 @@
 library sqljocky.blob;
 
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:collection/collection.dart';
 
@@ -14,7 +15,7 @@ const _listQuality = const ListEquality();
  * integers are treated as UTF-8 code units (unsigned 8-bit integers).
  */
 class Blob {
-  final List<int> _codeUnits;
+  final Uint8List _codeUnits;
 
   /// Create a [Blob] from a [string].
   factory Blob.fromString(String string) =>
@@ -27,7 +28,7 @@ class Blob {
   String toString() => utf8.decode(_codeUnits, allowMalformed: true);
 
   /// Returns the value of the blob as a list of code units.
-  List<int> toBytes() => _codeUnits;
+  Uint8List toBytes() => _codeUnits;
 
   int get hashCode => _listQuality.hash(_codeUnits);
 
