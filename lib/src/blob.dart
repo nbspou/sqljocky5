@@ -15,7 +15,7 @@ const _listQuality = const ListEquality();
  * integers are treated as UTF-8 code units (unsigned 8-bit integers).
  */
 class Blob {
-  final Uint8List _codeUnits;
+  final List<int> _codeUnits;
 
   /// Create a [Blob] from a [string].
   factory Blob.fromString(String string) =>
@@ -28,7 +28,7 @@ class Blob {
   String toString() => utf8.decode(_codeUnits, allowMalformed: true);
 
   /// Returns the value of the blob as a list of code units.
-  Uint8List toBytes() => _codeUnits;
+  List<int> toBytes() => _codeUnits;
 
   int get hashCode => _listQuality.hash(_codeUnits);
 

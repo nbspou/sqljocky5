@@ -48,7 +48,7 @@ class ExecuteQueryHandler extends Handler {
 
   Buffer createRequest() {
     var length = 0;
-    var types = new Uint8List(_values.length * 2);
+    var types = new List<int>(_values.length * 2);
     var nullMap = createNullMap();
     preparedValues = new List(_values.length);
     for (var i = 0; i < _values.length; i++) {
@@ -275,9 +275,9 @@ class ExecuteQueryHandler extends Handler {
     buffer.writeList(preparedValue);
   }
 
-  Uint8List createNullMap() {
+  List<int> createNullMap() {
     var bytes = ((_values.length + 7) / 8).floor().toInt();
-    var nullMap = new Uint8List(bytes);
+    var nullMap = new List<int>(bytes);
     var byte = 0;
     var bit = 0;
     for (var i = 0; i < _values.length; i++) {
@@ -297,7 +297,7 @@ class ExecuteQueryHandler extends Handler {
     return nullMap;
   }
 
-  Buffer writeValuesToBuffer(List<int> nullMap, int length, Uint8List types) {
+  Buffer writeValuesToBuffer(List<int> nullMap, int length, List<int> types) {
     var buffer = new Buffer(10 + nullMap.length + 1 + types.length + length);
     buffer.writeByte(COM_STMT_EXECUTE);
     buffer.writeUint32(_preparedQuery.statementHandlerId);

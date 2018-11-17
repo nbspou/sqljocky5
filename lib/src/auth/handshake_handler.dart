@@ -25,7 +25,7 @@ class HandshakeHandler extends Handler {
   int protocolVersion;
   String serverVersion;
   int threadId;
-  Uint8List scrambleBuffer;
+  List<int> scrambleBuffer;
   int serverCapabilities;
   int serverLanguage;
   int serverStatus;
@@ -78,7 +78,7 @@ class HandshakeHandler extends Handler {
         // read null-terminator
         response.readByte();
         scrambleBuffer =
-            new Uint8List(scrambleBuffer1.length + scrambleBuffer2.length);
+            new List<int>(scrambleBuffer1.length + scrambleBuffer2.length);
         scrambleBuffer.setRange(0, 8, scrambleBuffer1);
         scrambleBuffer.setRange(8, 8 + scrambleBuffer2.length, scrambleBuffer2);
       } else {
