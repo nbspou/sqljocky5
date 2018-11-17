@@ -137,7 +137,7 @@ class Buffer {
    * Reads a null terminated list of ints from the buffer.
    * Returns the list of ints from the buffer, without the terminating zero
    */
-  Uint8List readNullTerminatedList() {
+  List<int> readNullTerminatedList() {
     List<int> s = <int>[];
     while (_list[_readPos] != 0) {
       s.add(_list[_readPos]);
@@ -152,7 +152,7 @@ class Buffer {
    * Writes a null terminated list of ints from the buffer. The given [list]
    * should not contain the terminating zero.
    */
-  void writeNullTerminatedList(Uint8List list) {
+  void writeNullTerminatedList(List<int> list) {
     writeList(list);
     writeByte(0);
   }
