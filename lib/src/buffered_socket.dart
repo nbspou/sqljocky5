@@ -200,7 +200,7 @@ class BufferedSocket {
     _closed = true;
   }
 
-  Future<Null> startSSL() async {
+  Future<void> startSSL() async {
     log.fine("Securing socket");
     var socket = await RawSecureSocket.secure(_socket,
         subscription: _subscription, onBadCertificate: (cert) => true);

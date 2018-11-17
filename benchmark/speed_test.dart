@@ -15,7 +15,7 @@ class SpeedTest {
 
   SpeedTest(this.pool) : log = new Logger("SqlJocky.Speed");
 
-  Future<Null> run() async {
+  Future<void> run() async {
     await dropTables();
     await createTables();
     await insertSimpleData();
@@ -24,13 +24,13 @@ class SpeedTest {
     await pool.closeConnectionsWhenNotInUse();
   }
 
-  Future<Null> dropTables() {
+  Future<void> dropTables() {
     log.fine("dropping tables");
     var dropper = new TableDropper(pool, ['pets', 'people']);
     return dropper.dropTables();
   }
 
-  Future<Null> createTables() {
+  Future<void> createTables() {
     log.fine("creating tables");
     var querier = new QueryRunner(pool, [
       'create table people (id integer not null auto_increment, '
@@ -48,7 +48,7 @@ class SpeedTest {
     return querier.executeQueries();
   }
 
-  Future<Null> insertSimpleData() async {
+  Future<void> insertSimpleData() async {
     log.fine("inserting simple data");
     var sw = new Stopwatch()..start();
     var futures = <Future>[];
@@ -61,7 +61,7 @@ class SpeedTest {
     log.fine("inserted");
   }
 
-  Future<Null> insertPreparedData() async {
+  Future<void> insertPreparedData() async {
     log.fine("inserting prepared data");
     var sw = new Stopwatch()..start();
     var futures = <Future>[];
@@ -75,7 +75,7 @@ class SpeedTest {
     log.fine("inserted");
   }
 
-  Future<Null> selectPreparedData() async {
+  Future<void> selectPreparedData() async {
     log.fine("inserting prepared data");
     var sw = new Stopwatch()..start();
     var futures = <Future>[];

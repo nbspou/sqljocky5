@@ -98,5 +98,5 @@ abstract class ConnectionPool implements QueriableConnection {
    * The transaction will be automatically rolled back in case it has not
    * been released, or in case an exception occured during the transaction.
    */
-  Future<Null> startTransaction(Future<void> handler(Transaction transaction), {bool consistent: false});
+  Future<void> startTransaction(Future<void> handler(Transaction transaction), {bool consistent: false});
 }

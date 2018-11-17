@@ -91,7 +91,7 @@ class QueryImpl extends Object with ConnectionHelpers implements Query {
   }
 
   /// Closes this query and removes it from all connections in the pool.
-  Future<Null> close() async {
+  Future<void> close() async {
     await _pool.closeQuery(this, _inTransaction);
   }
 

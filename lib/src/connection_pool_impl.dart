@@ -275,7 +275,7 @@ class ConnectionPoolImpl extends Object
   // Close a prepared query on all connections which have this query.
   // This may take some time if it has to wait a long time for a
   // connection to become free.
-  Future<Null> closeQuery(Query q, bool retain) async {
+  Future<void> closeQuery(Query q, bool retain) async {
     _log.finest("Closing query: ${q.sql}");
     var thePool = new List<Connection>();
     thePool.addAll(_pool); // prevent concurrent modification
@@ -363,7 +363,7 @@ class ConnectionPoolImpl extends Object
    * The transaction will be automatically rolled back in case it has not
    * been released, or in case an exception occured during the transaction.
    */
-  Future<Null> startTransaction(Future<void> handler(Transaction transaction), {bool consistent: false}) async {
+  Future<void> startTransaction(Future<void> handler(Transaction transaction), {bool consistent: false}) async {
     TransactionImpl transaction = await _startTransaction(consistent: consistent);
     try {
       await handler(transaction);

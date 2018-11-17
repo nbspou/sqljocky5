@@ -48,7 +48,7 @@ class TransactionImpl extends _RetainedConnectionBase implements Transaction {
     }
   }
 
-  Future<Null> release() async {
+  Future<void> release() async {
     if (!_released) {
       await rollback();
     }
@@ -111,7 +111,7 @@ class RetainedConnectionImpl extends _RetainedConnectionBase
     implements RetainedConnection {
   RetainedConnectionImpl(cnx, pool) : super(cnx, pool);
 
-  Future<Null> release() async {
+  Future<void> release() async {
     _checkReleased();
     _released = true;
 

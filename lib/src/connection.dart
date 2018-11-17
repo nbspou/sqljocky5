@@ -176,7 +176,7 @@ class Connection {
     return await processHandler(handler);
   }
 
-  Future<Null> readPacket() async {
+  Future<void> readPacket() async {
     log.fine("readPacket readyForHeader=${_readyForHeader}");
     if (_readyForHeader) {
       _readyForHeader = false;
@@ -185,7 +185,7 @@ class Connection {
     }
   }
 
-  Future<Null> _handleHeader(buffer) async {
+  Future<void> _handleHeader(buffer) async {
     _dataSize = buffer[0] + (buffer[1] << 8) + (buffer[2] << 16);
     _packetNumber = buffer[3];
     log.fine("about to read $_dataSize bytes for packet ${_packetNumber}");
